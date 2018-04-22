@@ -7,8 +7,13 @@ import sqlite3
 import socket
 import sys
 import threading
-from Socket import socket_connection
+
+
 import RPi.GPIO as GPIO           # import RPi.GPIO module
+import smbus
+
+from Thread_package.thead_classes import *
+import serial
 
 sqlite_file = '/home/jdv/Project/SmartHome_Webserver/homedash/Database/database.db'
 
@@ -17,50 +22,9 @@ c = conn.cursor()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+bus = smbus.SMBus(1)
 
-class ReceiveThread(threading.Thread):
-    def __init__(self, threadID, name, condition, connected):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.condition = condition
-        self.connected = connected
-
-    def run(self):
-        logging.info("Thread Function - Starting " + self.name)
-        socket_connection.waiter_receive_socket(self.condition, self.connected, self.name)
-        logging.info("Thread Function - Exiting " + self.name)
-
-
-class SendThread(threading.Thread):
-    def __init__(self, threadID, name, condition, connected):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.condition = condition
-        self.connected = connected
-
-    def run(self):
-        pass
-        #logging.info("Thread Function - Starting " + self.name)
-        #socket_connection.send_socket(self.condition, self.connected, self.name)
-        #logging.info("Thread Function - Exiting " + self.name)
-
-
-class HelperThread(threading.Thread):
-    def __init__(self, threadID, name, condition, connected):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.condition = condition
-        self.connected = connected
-
-    def run(self):
-        pass
-        logging.info("Thread Function - Starting " + self.name)
-        socket_connection.application_socket_connection(self.condition, self.connected, self.name)
-        logging.info("Thread Function -Exiting " + self.name)
-
+ser = serial.Serial('/dev/ttyAMA0', 4800, timeout=0, rtscts=True)
 
 def configuration():
     now = datetime.datetime.now()
@@ -94,6 +58,7 @@ def main():
     receiver_thread = ReceiveThread(1, "Thread-rec", condition, connected)
     sender_thread = SendThread(2, "Thread-send", condition, connected)
     helper_thread = HelperThread(3, "Thread-send", condition, connected)
+    arduino_thread = Arduino_thead(4, "Thread-send", condition, connected)
 
     # Start new Threads
     logging.info("Main - Receiving Thread")
@@ -102,6 +67,8 @@ def main():
     sender_thread.start()
     logging.info("Main - Helper Thread")
     helper_thread.start()
+    logging.info("Main - arduino Thread")
+    arduino_thread.start()
 
 if __name__ == "__main__":
     main()

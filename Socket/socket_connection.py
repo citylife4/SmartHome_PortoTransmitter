@@ -11,10 +11,12 @@ from sqlite3 import DatabaseError
 import rs485 as RS485
 import RPi.GPIO as GPIO           # import RPi.GPIO module
 from time import sleep
-import serial
+
 
 import db_interaction as db
 import threading
+from run import bus
+from run import ser
 
 connected = False
 
@@ -127,16 +129,24 @@ def application_socket_connection(condition, lol, threadName):
 
         #TODO change this
 
-        i = "1"
-        bus = smbus.SMBus(1)
-        bus.write_word_data(0x04, 0x00, int(i))
+        i = "a"
+        a = "~zwxc"
+        b = "c"
 
-        for device in range(128):
-            try:
-                bus.read_byte(device)
-                print(hex(device))
-            except:  # exception if read_byte fails
-                pass
+
+        packet = "1".encode()
+        ser.write(packet)
+        sleep(1)
+
+
+        '''
+        for char in a:
+            bus.write_byte(0x4, int( ord(char)))
+            time.sleep(.1)
+            #print(chr(int(bus.read_byte(4))))
+        '''
+
+
 
 
         '''
