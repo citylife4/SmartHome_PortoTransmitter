@@ -20,6 +20,7 @@ def i2c(id, tick):
 
       print(d[:-1])
 
+
 def application_arduino_checker(condition, lol, threadName):
     # Respond to BSC slave activity
 
@@ -31,7 +32,7 @@ def application_arduino_checker(condition, lol, threadName):
             print(read)
             if "manualy" in read:
                 print("man")
-                insert_porto_door('True')
+                insert_porto_door(1)
             if "remotaly" in read :
                 print("re")
-                insert_porto_door(False)
+                insert_porto_door(0)
