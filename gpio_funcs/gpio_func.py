@@ -1,7 +1,6 @@
 import RPi.GPIO as GPIO
 import time
 import sys
-import signal
 
 from db_interaction import insert_porto_door
 

@@ -1,19 +1,22 @@
 #!flask/bin/python
 
-import logging
 import datetime
 import os
 import sqlite3
-import socket
 import sys
-import threading
-
 
 import RPi.GPIO as GPIO           # import RPi.GPIO module
-import smbus
 
 from Thread_package.thead_classes import *
 import serial
+
+ser = serial.Serial('/dev/serial0',
+           baudrate=4800,
+           parity=serial.PARITY_NONE,
+           stopbits=serial.STOPBITS_ONE,
+           bytesize=serial.EIGHTBITS,
+           timeout=1)
+
 
 sqlite_file = '/home/jdv/Project/SmartHome_Webserver/homedash/Database/database.db'
 
@@ -22,15 +25,14 @@ c = conn.cursor()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-bus = smbus.SMBus(1)
-
-ser = serial.Serial('/dev/ttyAMA0', 4800, timeout=0, rtscts=True)
 
 def configuration():
     now = datetime.datetime.now()
-    logging.basicConfig(level=logging.DEBUG, filename="/home/jdv/logfiles/logfile_" + now.strftime("%Y_%m_%d") + ".log",
-                        filemode="a+",
-                        format="%(asctime)-15s %(levelname)-8s %(threadName)-9s) %(message)s")
+    #logging.basicConfig(level=logging.DEBUG, filename="/home/jdv/logfiles/logfile_" + now.strftime("%Y_%m_%d") + ".log",
+    #                    filemode="a+",
+    #                    format="%(asctime)-15s %(levelname)-8s %(threadName)-9s) %(message)s")
+
+    logging.basicConfig(level=logging.DEBUG)
 
     root = logging.getLogger()
     root.setLevel(logging.DEBUG)

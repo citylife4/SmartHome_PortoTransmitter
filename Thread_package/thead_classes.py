@@ -1,9 +1,10 @@
-import sys
-import threading
 import logging
+import threading
+
+from Arduino import arduino_connection
 from Socket import socket_connection
-from I2C_connection import arduino_connection
 from gpio_funcs import gpio_func
+
 
 class ReceiveThread(threading.Thread):
     def __init__(self, threadID, name, condition, connected):

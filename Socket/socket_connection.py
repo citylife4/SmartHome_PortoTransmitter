@@ -1,21 +1,10 @@
 
 import socket
-import os
-import subprocess
-import re
 import time
 import logging
-import smbus
-
 from sqlite3 import DatabaseError
-import rs485 as RS485
-import RPi.GPIO as GPIO           # import RPi.GPIO module
 from time import sleep
-
-
 import db_interaction as db
-import threading
-from run import bus
 from run import ser
 
 connected = False
@@ -26,6 +15,44 @@ INTERNAL_PORT = 54897
 # This is the address we setup in the Arduino Program
 # Slave Address 1
 address = 0x04
+
+
+class TCPsocket:
+
+    def __init__(self, sock=None, server_address=None):
+        if socket is None:
+            self.sock = socket.socket(
+                socket.AF_INET
+                , socket.SOCK_STREAM
+            )
+            self.sock.setsockopt(
+                socket.SOL_SOCKET
+                , socket.SO_REUSEADDR
+                , 1
+            )
+            self.bind(server_address)
+        else:
+            self.sock = sock
+
+    def __del__(self):
+        self.sock.close()
+
+    def bind(self, server_address):
+        self.sock.bind(server_address)
+        self.sock.listen(1)
+
+    def connection(self):
+        connection , client_address = self.sock.accept()
+        try:
+            data = connection.recv(1024).decode()
+        finally:
+            connection.close()
+
+    def protocol(self, data):
+        return {
+            'IP' : 'x',
+        }.get(data, 'problem')
+
 
 # create the connection and check if something is getting through
 def waiter_receive_socket(condition, lol, threadName):
@@ -50,6 +77,7 @@ def waiter_receive_socket(condition, lol, threadName):
             # Receive the data in small chunks and retransmit it
             data = connection.recv(1024).decode()
             logging.info('Received %s' % data)
+
             if "IP" in data:
                 logging.warning("IP received %s" % client_address[0])
                 connected = False
@@ -57,6 +85,7 @@ def waiter_receive_socket(condition, lol, threadName):
                 ip_file.write(client_address[0])
                 ip_file.close()
                 connected = True
+
             elif "status" in data:
                 logging.warning("Receiving state %s" % data)
                 status = data.split("_")[3]
@@ -113,6 +142,10 @@ def send_socket(condition, lol, threadName):
                 logging.info('Received %s ' % data_door)
             finally:
                 sock_send.close()
+        else:
+            while not connected:
+                time.sleep(10)
+                print("Waiting for connection")
 
 
 def application_socket_connection(condition, lol, threadName):
@@ -137,46 +170,3 @@ def application_socket_connection(condition, lol, threadName):
         packet = "1".encode()
         ser.write(packet)
         sleep(1)
-
-
-        '''
-        for char in a:
-            bus.write_byte(0x4, int( ord(char)))
-            time.sleep(.1)
-            #print(chr(int(bus.read_byte(4))))
-        '''
-
-
-
-
-        '''
-        ser = serial.Serial('/dev/ttyAMA0', 19200, timeout=0, rtscts=True)
-
-        rs485 = RS485.SerialWrapper(ser)
-        packet = "ola".encode()
-
-        GPIO.setup(18, GPIO.OUT)
-        GPIO.output(18, 1)  # set GPIO24 to 1/GPIO.HIGH/True
-        sleep(0.5)
-        rs485.sendMsg(packet)
-        sleep(0.5)
-        GPIO.output(18, 0)  # set GPIO24 to 0/GPIO.LOW/False
-        GPIO.cleanup(18)
-
-        print("Done")
-
-        timeout = time.time() + 10 # 5 minutes from now
-        while True:
-            state = ser.readline()
-            print(state)
-
-            if rs485.update():
-                packet = rs485.getPacket()
-                print(len(packet), " bytes received\n".encode())
-                print(packet)
-                break
-            elif time.time() > timeout:
-                break
-
-        print("Break")
-        '''
