@@ -1,80 +1,61 @@
 import logging
-import threading
+import socket
+
+from threading import Thread
+from time import sleep
 
 from Arduino import arduino_connection
-from Socket import socket_connection
+from socket_dir import socket_connection, socket_parser
 from gpio_funcs import gpio_func
 
 
-class ReceiveThread(threading.Thread):
-    def __init__(self, threadID, name, condition, connected):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.condition = condition
-        self.connected = connected
+
+class ReceiveThread(Thread):
+    def __init__(self, host, port):
+        super(ReceiveThread,self).__init__()
+
+        self.connection = None
+        self.server = socket.socket(
+            socket.AF_INET
+            , socket.SOCK_STREAM
+        )
+        self.server.setsockopt(
+            socket.SOL_SOCKET
+            , socket.SO_REUSEADDR
+            , 1
+        )
+        self.server.bind(('',4662))
+        self.server.listen(1)
 
     def run(self):
-        logging.info("Thread Function - Starting " + self.name)
-        socket_connection.waiter_receive_socket(self.condition, self.connected, self.name)
-        logging.info("Thread Function - Exiting " + self.name)
+        logging.info("ReceiveThread Thread - Starting ")
+        #socket_connection.socker_bind_connection()
+        while 1:
+            #connection can terminate at anytime
+            #Try catch??
+            connection, addr = self.server.accept()
+            rcvd_data = connection.recv(4096).decode("utf-8")
+            if rcvd_data:
+                socket_parser.rasp_parser(rcvd_data)
 
 
-class SendThread(threading.Thread):
-    def __init__(self, threadID, name, condition, connected):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.condition = condition
-        self.connected = connected
+class SendThread(Thread):
+    def __init__(self):
+        super(SendThread,self).__init__()
 
     def run(self):
         pass
-        #logging.info("Thread Function - Starting " + self.name)
-        #socket_connection.send_socket(self.condition, self.connected, self.name)
+        logging.info("Thread Function - Starting " + self.name)
+        socket_connection.send_socket()
         #logging.info("Thread Function - Exiting " + self.name)
 
 
-class HelperThread(threading.Thread):
-    def __init__(self, threadID, name, condition, connected):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.condition = condition
-        self.connected = connected
+class PortoDoorThread(Thread):
+    def __init__(self):
+        super(PortoDoorThread,self).__init__()
 
     def run(self):
         pass
-        logging.info("Thread Function - Starting " + self.name)
-        socket_connection.application_socket_connection(self.condition, self.connected, self.name)
-        logging.info("Thread Function -Exiting " + self.name)
-
-
-class Arduino_thead(threading.Thread):
-    def __init__(self, threadID, name, condition, connected):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.condition = condition
-        self.connected = connected
-
-    def run(self):
-        pass
-        logging.info("Thread Function - Starting " + self.name)
-        arduino_connection.application_arduino_checker(self.condition, self.connected, self.name)
-        logging.info("Thread Function -Exiting " + self.name)
-
-
-class Porto_Door_thead(threading.Thread):
-    def __init__(self, threadID, name, condition, connected):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.condition = condition
-        self.connected = connected
-
-    def run(self):
-        pass
-        logging.info("Thread Function - Starting " + self.name)
+        logging.info("Porto_Door_thead - Starting")
         gpio_func.Porto_door_checker()
-        logging.info("Thread Function -Exiting " + self.name)
+        logging.info("Porto_Door_thead -Exiting ")
