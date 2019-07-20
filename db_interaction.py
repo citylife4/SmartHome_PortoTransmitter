@@ -10,18 +10,17 @@ def insert_state(state):
     cur = con.cursor()
     state_to_add = 1 if state == 'True' else 0
     with con:
-        cur.execute('INSERT INTO door (date, door_status) VALUES (?, ?)', (datetime.now(), str(state_to_add)))
+        cur.execute('INSERT INTO palacoulo_garage_door (date, door_status) VALUES (?, ?)', (datetime.now(), str(state_to_add)))
     con.close()
     return con, cur
 
 
 def insert_porto_door(state):
+    print(state)
     con = sql.connect(path_db, isolation_level=None)
     cur = con.cursor()
-    bool_to_add = 1 if state == 1 or 3 else 0
     with con:
-        cur.execute('INSERT INTO porto_door_status (date, door_opened,door_status) VALUES (?, ?,?)', (datetime.now(),
-                                                                                                      str(bool_to_add),
+        cur.execute('INSERT INTO porto_door_status (date, door_status) VALUES (?, ?)', (datetime.now(),
                                                                                                       str(state)))
     con.close()
     return con, cur

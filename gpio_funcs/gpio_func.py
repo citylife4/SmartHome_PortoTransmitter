@@ -1,7 +1,6 @@
 import RPi.GPIO as GPIO
 import time
 import sys
-import signal
 
 from db_interaction import insert_porto_door
 
@@ -24,32 +23,32 @@ def Porto_door_checker():
         sys.exit(0)
 
     # Set up the door sensor pin.
-    GPIO.setup(DOOR_SENSOR_PIN, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+    GPIO.setup(DOOR_SENSOR_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     try:
         while True:
             oldIsOpen = isOpen
             isOpen = GPIO.input(DOOR_SENSOR_PIN)
 
-            if (isOpen and (isOpen != oldIsOpen)):
+            if isOpen and (isOpen != oldIsOpen):
                 print("Space is unoccupied!")
-                insert_porto_door(3)
+                insert_porto_door('door_open')
 
-            elif (isOpen != oldIsOpen):
+            elif isOpen != oldIsOpen:
                 print("Space is occupied!")
 
             time.sleep(0.1)
 
     except KeyboardInterrupt:
-            # here you put any code you want to run before the program
-            # exits when you press CTRL+C
-            print("\n")  # print value of counter
+        # here you put any code you want to run before the program
+        # exits when you press CTRL+C
+        print("\n")  # print value of counter
 
     except:
         # this catches ALL other exceptions including errors.
         # You won't get any error messages for debugging
         # so only use it once your code is working
-        print ("Other error or exception occurred!")
+        print("Other error or exception occurred!")
 
     finally:
         GPIO.cleanup()  # this ensures a clean exit
