@@ -8,4 +8,12 @@
     <orderEntry type="library" name="R User Library" level="project" />
     <orderEntry type="library" name="R Skeletons" level="application" />
   </component>
+  <component name="TemplatesService">
+    <option name="TEMPLATE_FOLDERS">
+      <list>
+        <option value="$MODULE_DIR$/../SmartHome_git/homedash/static" />
+        <option value="$MODULE_DIR$/../SmartHome_git/homedash/templates" />
+      </list>
+    </option>
+  </component>
 </module>
