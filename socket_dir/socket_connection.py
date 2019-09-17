@@ -51,7 +51,6 @@ class TCPsocket:
         finally:
             self.connection.close()
 
-
     def protocol(self, data):
         return {
             'IP': 'x',

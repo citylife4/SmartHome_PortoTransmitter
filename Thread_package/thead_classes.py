@@ -8,10 +8,8 @@ from Arduino import arduino_connection
 from socket_dir import socket_connection, socket_parser
 from gpio_funcs import gpio_func
 
-
-
 class ReceiveThread(Thread):
-    def __init__(self, host, port):
+    def __init__(self, host='', port=4662):
         super(ReceiveThread,self).__init__()
 
         self.connection = None
@@ -24,7 +22,7 @@ class ReceiveThread(Thread):
             , socket.SO_REUSEADDR
             , 1
         )
-        self.server.bind(('',4662))
+        self.server.bind((host,port))
         self.server.listen(1)
 
     def run(self):
@@ -36,7 +34,7 @@ class ReceiveThread(Thread):
             connection, addr = self.server.accept()
             rcvd_data = connection.recv(4096).decode("utf-8")
             if rcvd_data:
-                socket_parser.rasp_parser(rcvd_data)
+                socket_parser.rasp_parser(rcvd_data,connection)
 
 
 class SendThread(Thread):
@@ -56,6 +54,6 @@ class PortoDoorThread(Thread):
 
     def run(self):
         pass
-        logging.info("Porto_Door_thead - Starting")
-        gpio_func.Porto_door_checker()
-        logging.info("Porto_Door_thead -Exiting ")
+        #logging.info("Porto_Door_thead - Starting")
+        #gpio_func.Porto_door_checker()
+        #logging.info("Porto_Door_thead -Exiting ")

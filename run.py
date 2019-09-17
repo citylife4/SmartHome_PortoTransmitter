@@ -12,7 +12,7 @@ import serial
 from Arduino import arduino_connection
 from webserver_connection.webserver_connection import WebserverConnection
 
-sqlite_file = '/home/jdv/Project/SmartHome_Webserver/homedash/Database/database.db'
+sqlite_file = '/home/jdv/Project/SmartHome_Webserver/app/Database/database.db'
 
 conn = sqlite3.connect(sqlite_file)
 c = conn.cursor()
@@ -52,7 +52,7 @@ def main():
     sender_thread   = SendThread()
     helper_thread   = WebserverConnection()
     arduino_thread  = arduino_connection.ArduinoThead()
-    porto_thread    = PortoDoorThread()
+    #porto_thread    = PortoDoorThread()
 
     # Start new Threads
     logging.info("Main - Receiving Thread")
@@ -63,8 +63,8 @@ def main():
     helper_thread.start()
     logging.info("Main - arduino Thread")
     arduino_thread.start()
-    logging.info("Main - Porto Thread")
-    porto_thread.start()
+    #logging.info("Main - Porto Thread")
+    #porto_thread.start()
 
 
 if __name__ == "__main__":
