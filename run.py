@@ -5,10 +5,8 @@ import os
 import sqlite3
 import sys
 
-import RPi.GPIO as GPIO  # import RPi.GPIO module
 
 from Thread_package.thead_classes import *
-import serial
 from Arduino import arduino_connection
 from webserver_connection.webserver_connection import WebserverConnection
 
@@ -38,8 +36,6 @@ def configuration():
     root.addHandler(ch)
 
     ip_file = open("/home/jdv/Project/SmartHome_transmitter/tmp/ip_name.bin", "r+")
-
-    GPIO.setmode(GPIO.BCM)  # choose BCM or BOARD
 
 
 class Transmitter:
