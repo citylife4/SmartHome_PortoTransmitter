@@ -5,7 +5,7 @@ import os
 import sqlite3
 import sys
 
-import RPi.GPIO as GPIO           # import RPi.GPIO module
+import RPi.GPIO as GPIO  # import RPi.GPIO module
 
 from Thread_package.thead_classes import *
 import serial
@@ -42,26 +42,29 @@ def configuration():
     GPIO.setmode(GPIO.BCM)  # choose BCM or BOARD
 
 
-def main():
-    configuration()
-    logging.info("Main - Starting Server")
+class Transmitter:
 
-    # for RPI version 1, use "bus = smbus.SMBus(0)"
+    def __init__(self):
+        configuration()
+        logging.info("Main - Starting Server")
 
-    receiver_thread = ReceiveThread('', 4662)
-    sender_thread   = SendThread()
-    helper_thread   = WebserverConnection()
-    arduino_thread  = arduino_connection.ArduinoThead()
+        # for RPI version 1, use "bus = smbus.SMBus(0)"
 
-    # Start new Threads
-    logging.info("Main - Receiving Thread")
-    receiver_thread.start()
-    logging.info("Main - Sending Thread")
-    sender_thread.start()
-    logging.info("Main - WebserverConnection Thread")
-    helper_thread.start()
-    logging.info("Main - arduino Thread")
-    arduino_thread.start()
+        receiver_thread = ReceiveThread('', 4662)
+        sender_thread = SendThread()
+        helper_thread = WebserverConnection()
+        arduino_thread = arduino_connection.ArduinoThead()
+
+        # Start new Threads
+        logging.info("Main - Receiving Thread")
+        receiver_thread.start()
+        logging.info("Main - Sending Thread")
+        sender_thread.start()
+        logging.info("Main - WebserverConnection Thread")
+        helper_thread.start()
+        logging.info("Main - arduino Thread")
+        arduino_thread.start()
+
 
 if __name__ == "__main__":
-    main()
+    transmitter = Transmitter()

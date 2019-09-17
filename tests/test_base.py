@@ -1,4 +1,4 @@
-from homedash import app
+from run import Transmitter
 import unittest
 
 
@@ -13,10 +13,11 @@ class FlaskAppTests(unittest.TestCase):
         pass
 
     def setUp(self):
+        pass
         # creates a test client
-        self.app = app.test_client()
+        #transmit = Transmitter()
         # propagate the exceptions to the test client
-        self.app.testing = True
+        #self.app.testing = True
 
     def tearDown(self):
         pass

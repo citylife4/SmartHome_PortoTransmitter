@@ -6,7 +6,6 @@ from time import sleep
 
 from Arduino import arduino_connection
 from socket_dir import socket_connection, socket_parser
-from gpio_funcs import gpio_func
 
 class ReceiveThread(Thread):
     def __init__(self, host='', port=4662):
