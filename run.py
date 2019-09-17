@@ -52,7 +52,6 @@ def main():
     sender_thread   = SendThread()
     helper_thread   = WebserverConnection()
     arduino_thread  = arduino_connection.ArduinoThead()
-    #porto_thread    = PortoDoorThread()
 
     # Start new Threads
     logging.info("Main - Receiving Thread")
@@ -63,9 +62,6 @@ def main():
     helper_thread.start()
     logging.info("Main - arduino Thread")
     arduino_thread.start()
-    #logging.info("Main - Porto Thread")
-    #porto_thread.start()
-
 
 if __name__ == "__main__":
     main()

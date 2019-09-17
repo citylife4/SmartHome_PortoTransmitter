@@ -46,14 +46,3 @@ class SendThread(Thread):
         logging.info("Thread Function - Starting " + self.name)
         socket_connection.send_socket()
         #logging.info("Thread Function - Exiting " + self.name)
-
-
-class PortoDoorThread(Thread):
-    def __init__(self):
-        super(PortoDoorThread,self).__init__()
-
-    def run(self):
-        pass
-        #logging.info("Porto_Door_thead - Starting")
-        #gpio_func.Porto_door_checker()
-        #logging.info("Porto_Door_thead -Exiting ")
