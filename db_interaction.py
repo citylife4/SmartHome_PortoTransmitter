@@ -1,6 +1,6 @@
-import logging
 import sqlite3 as sql
 from datetime import datetime
+import logging
 import hashlib
 
 path_db = "/home/jdv/Project/SmartHome_Webserver/app/Database/database.db"

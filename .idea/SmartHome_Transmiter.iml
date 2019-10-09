@@ -2,16 +2,8 @@
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="jdvalverde.dyinp" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Remote Python 3.5.3 (sftp://jdv@192.168.1.10:22/home/jdv/Project/SmartHome_Webserver/venv/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="SmartHome_git" />
-  </component>
-  <component name="TemplatesService">
-    <option name="TEMPLATE_FOLDERS">
-      <list>
-        <option value="$MODULE_DIR$/../SmartHome_git/homedash/static" />
-        <option value="$MODULE_DIR$/../SmartHome_git/homedash/templates" />
-      </list>
-    </option>
   </component>
 </module>
