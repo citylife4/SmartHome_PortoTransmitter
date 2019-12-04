@@ -3,7 +3,7 @@ from datetime import datetime
 import logging
 import hashlib
 
-path_db = "/home/jdv/Project/SmartHome_Webserver/app/Database/database.db"
+path_db = "/home/jdv/projects/website/SmartHome_PortoWeb/app/Database/database.db"
 
 
 def insert_state(state):

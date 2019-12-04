@@ -10,7 +10,7 @@ from Thread_package.thead_classes import *
 from Arduino import arduino_connection
 from webserver_connection.webserver_connection import WebserverConnection
 
-sqlite_file = '/home/jdv/Project/SmartHome_Webserver/app/Database/database.db'
+sqlite_file = '/home/jdv/projects/website/SmartHome_PortoWeb/app/Database/database.db'
 
 conn = sqlite3.connect(sqlite_file)
 c = conn.cursor()
@@ -35,7 +35,7 @@ def configuration():
     ch.setFormatter(formatter)
     root.addHandler(ch)
 
-    ip_file = open("/home/jdv/Project/SmartHome_transmitter/tmp/ip_name.bin", "r+")
+    ip_file = open("/home/jdv/projects/website/SmartHome_PortoTransmitter/tmp/ip_name.bin", "r+")
 
 
 class Transmitter:

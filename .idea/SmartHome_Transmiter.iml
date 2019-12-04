@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="Remote Python 3.5.3 (sftp://jdv@192.168.1.10:22/home/jdv/Project/SmartHome_Webserver/venv/bin/python)" jdkType="Python SDK" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/Arduino" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/socket_dir" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Thread_package" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/webserver_connection" isTestSource="false" />
+    </content>
+    <orderEntry type="jdk" jdkName="Remote Python 3.7.3 (sftp://jdv@192.168.1.10:22/home/jdv/projects/rpi_venv/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="SmartHome_git" />
   </component>
 </module>

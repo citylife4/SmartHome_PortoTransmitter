@@ -32,14 +32,15 @@ handlers = {
 def arduino_parser(data, last_comunication):
     logging.info("arduino_parser - received:" + data)
     data_list = list(filter(None, data.strip().split('_')))
+    #TODO: from config file
+    #TODO: check why arduino sends many..
+    if (time.monotonic() - last_comunication) < 3: return
     if data_list[1] == '0':
         if data_list[3] == '21' and data_list[4] == '1':
             insert_porto_door("opening_manualy")
         if data_list[3] == '2' and data_list[4] == '1':
             insert_porto_door("opening_remotaly")
         if data_list[3] == '21' and data_list[4] == '0':
-            print()
-            if (time.monotonic() - last_comunication) < 3: return
             insert_porto_door("door_belt")
         if data_list[3] == '4' and data_list[4] == '1':
             insert_porto_door("door_open")
