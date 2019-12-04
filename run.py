@@ -17,6 +17,24 @@ c = conn.cursor()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+debug=os.getenv('TRANSMITTER_DEBUG')
+if not os.getenv('TRANSMITTER_DEBUG'):
+    debug=0
+
+
+class StreamToLogger(object):
+    """
+    Fake file-like stream object that redirects writes to a logger instance.
+    """
+    def __init__(self, logger, log_level=logging.INFO):
+        self.logger = logger
+        self.log_level = log_level
+        self.linebuf = ''
+
+    def write(self, buf):
+        for line in buf.rstrip().splitlines():
+            self.logger.log(self.log_level, line.rstrip())
+
 
 def configuration():
     now = datetime.datetime.now()
@@ -24,16 +42,22 @@ def configuration():
     #                    filemode="a+",
     #                    format="%(asctime)-15s %(levelname)-8s %(threadName)-9s) %(message)s")
 
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG,
+                        format="%(asctime)-15s %(levelname)-8s %(threadName)-9s) %(message)s")
 
-    root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
+    stdout_logger = logging.getLogger('STDOUT')
+    sl = StreamToLogger(stdout_logger, logging.INFO)
+    sys.stdout = sl
 
-    ch = logging.StreamHandler(sys.stdout)
-    ch.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    ch.setFormatter(formatter)
-    root.addHandler(ch)
+    stderr_logger = logging.getLogger('STDERR')
+    sl = StreamToLogger(stderr_logger, logging.ERROR)
+    sys.stderr = sl
+
+    #ch = logging.StreamHandler(sys.stdout)
+    #ch.setLevel(logging.DEBUG)
+    #formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    #ch.setFormatter(formatter)
+    #root.addHandler(ch)
 
     ip_file = open("/home/jdv/projects/website/SmartHome_PortoTransmitter/tmp/ip_name.bin", "r+")
 
@@ -50,6 +74,7 @@ class Transmitter:
         sender_thread = SendThread()
         helper_thread = WebserverConnection()
         arduino_thread = arduino_connection.ArduinoThead()
+        debug_thread = DebugThread()
 
         # Start new Threads
         logging.info("Main - Receiving Thread")
@@ -60,6 +85,8 @@ class Transmitter:
         helper_thread.start()
         logging.info("Main - arduino Thread")
         arduino_thread.start()
+        logging.info("Main - Debug")
+        debug_thread.start()
 
 
 if __name__ == "__main__":

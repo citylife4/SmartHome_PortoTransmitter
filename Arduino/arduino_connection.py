@@ -38,10 +38,11 @@ class ArduinoThead(Thread):
         super(ArduinoThead, self).__init__()
 
     def setup(self):
-        arduino_ser.write("<0_1_1_13_1>".encode())
+        #pass
+        #arduino_ser.write("<0_1_1_13_1>".encode())
         time.sleep(1)
-        arduino_ser.write("<0_1_1_13_0>".encode())
-        arduino_ser.write("<0_1_2_4_2>".encode())
+        #arduino_ser.write("<0_1_1_13_0>".encode())
+        arduino_ser.write("<0_1_3_4_2>".encode())
 
     def run(self):
         logging.info("ArduinoThread Function - Starting " + self.name)

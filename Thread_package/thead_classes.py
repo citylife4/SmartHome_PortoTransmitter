@@ -1,14 +1,16 @@
 import logging
 import socket
+import sys
 
+from run import debug
 from threading import Thread
-from time import sleep
-
-from Arduino import arduino_connection
 from socket_dir import socket_connection, socket_parser
 
+
+from Arduino.arduino_connection import arduino_ser
+
 class ReceiveThread(Thread):
-    def __init__(self, host='', port=4662):
+    def __init__(self, host='', port=4662,name='my_thread'):
         super(ReceiveThread,self).__init__()
 
         self.connection = None
@@ -45,3 +47,31 @@ class SendThread(Thread):
         logging.info("Thread Function - Starting " + self.name)
         socket_connection.send_socket()
         #logging.info("Thread Function - Exiting " + self.name)
+
+class DebugThread(Thread):
+    def __init__(self):
+        super(DebugThread,self).__init__()
+
+    def run(self):
+        logging.info("DebugThread Function - Starting Debug-Mode: "+ str(debug))
+        if debug == 1:
+            while 1:
+                for line in sys.stdin:
+                    try:
+                        logging.info(line)
+                        data_list = list(filter(None, line.strip().split('_')))
+                        to_send = "<0_"+data_list[1]
+                        if "set" in line:
+                            to_send += "_0_"
+                        if "get" in line:
+                            to_send += "_1_"
+                        if "config" in line:
+                            to_send += "_2_"
+                        if "debug" in line:
+                            to_send += "_3_"
+                        to_send += data_list[2]+"_"+data_list[3]+ ">"
+                        logging.info(to_send)
+                        arduino_ser.write( str(to_send).encode() )
+                    except:
+                        logging.error("Problems: ", sys.exc_info()[0])
+
