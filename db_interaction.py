@@ -1,8 +1,9 @@
 import sqlite3 as sql
 from datetime import datetime
+import logging
 import hashlib
 
-path_db = "/home/jdv/Project/SmartHome_Webserver/homedash/Database/database.db"
+path_db = "/home/jdv/projects/website/SmartHome_PortoWeb/app/Database/database.db"
 
 
 def insert_state(state):
@@ -16,7 +17,7 @@ def insert_state(state):
 
 
 def insert_porto_door(state):
-    print(state)
+    logging.info("database - received:" + state)
     con = sql.connect(path_db, isolation_level=None)
     cur = con.cursor()
     with con:

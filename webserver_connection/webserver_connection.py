@@ -18,10 +18,17 @@ class WebserverConnection(Thread):
     def run(self):
         pass
         logging.info("WebserverConnection Function - Starting ")
-        while True:
-            self.server.listen(1)
-            client_connection, client_address = self.server.accept()
-            data = client_connection.recv(1024).decode()
-            logging.info("Thread Function - From WebServer: %s", data)
-            webserver_parser(data)
+
+        try:
+            while True:
+                self.server.listen(1)
+                client_connection, client_address = self.server.accept()
+                data = client_connection.recv(1024).decode()
+                logging.info("WebserverConnection - Receiving: %s", data)
+                webserver_parser(data)
+                client_connection.send("received".encode())
+
+        finally:
+            logging.info("WebserverConnection - Receiving - Closing")
+            self.server.close()
             # change this
