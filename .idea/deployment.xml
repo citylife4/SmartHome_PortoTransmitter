@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="Porto-Server">
+    <serverData>
+      <paths name="Porto-Server">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/Project/SmartHome_transmitter" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
