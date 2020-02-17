@@ -22,12 +22,9 @@ def h_update_ip(data, connection):
 def h_update_status(data, connection):
     logging.info("h_update_status: {}".format(data))
     status = data.pop(0)
-    if status == "True" or status == "False":
-        conn = db.insert_state(status)
-        if conn is None:
-            raise DatabaseError("Could not get connection")
-    else:
-        logging.error("Error not implemented - status missing")
+    conn = db.insert_state(status)
+    if conn is None:
+        raise DatabaseError("Could not get connection")
     return '_'.join(data)
 
 
